@@ -28,6 +28,7 @@ class Shader
 		GLuint getID();
 	private:
 		GLuint shaderID;
+		void verificarCompilacion(GLuint id);
 };
 
 /*Shader::Shader()
