@@ -74,9 +74,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 	//Establecemos la ventana como contexto
-
 	glfwMakeContextCurrent(window);
-
 	//una vez establecido el contexto
 	//se activan las funciones "modernas" (gpu)
 	glewExperimental = true;
@@ -94,10 +92,27 @@ int main()
 	const char* rutaVertexShader = "VertexShader.shader";
 	const char* rutaFragmentShader = "FragmentShader.shader";
 	shader = new Shader(rutaVertexShader,rutaFragmentShader);
+	//Mapeo de atributos
+	posicionID = glGetAttribLocation(shader->getID(), "posicion");
+	colorID = glGetAttribLocation(shader->getID(), "color");
+
+	shader->desenlazar();
+	//Crear el vertex array del triangulo
+	glGenVertexArrays(1, &vertexArrayTrianguloID);
+	glBindVertexArray(vertexArrayTrianguloID);
+	//Vertex buffer
+	glGenBuffers(1, &bufferTrianguloID);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferTrianguloID);
+	//Asociar datos al buffer
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertice) * triangulo.size(), triangulo.data(), GL_STATIC_DRAW);
+	//Habilitar atributos de shader
+	glEnableVertexAttribArray(posicionID);
+	glEnableVertexAttribArray(colorID);
+	//Especificar a OpenGL como comunicarse
+	glVertexAttribPointer(posicionID, 3, GL_FLOAT, GL_FALSE, sizeof(Vertice), 0);
 
 	//Ciclo de dibujo (DrawLoop)
 	while (!glfwWindowShouldClose(window)) {
-
 		//Establecer región de dibujo
 		glViewport(00, 0, 600, 600);
 		//Establecemos el color de borrado
